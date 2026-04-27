@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr" style="background:#000!important">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HYROX — Nutrition</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,800;0,900;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lime:#CCFF00;
+  --teal:#00E5A0;
+  --blue:#4B9EFF;
+  --purple:#B39DFF;
+  --amber:#FFB800;
+  --red:#FF4444;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:#000!important;min-height:100%}
+body{background:#000!important;color:#ededea;font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh;padding:24px 18px 60px;max-width:640px}
+#app{background:#000;min-height:100vh}
+
+.topbar{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid #222}
+.brand{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;letter-spacing:0.1em;text-transform:uppercase;color:#ededea}
+.brand em{color:var(--lime);font-style:normal}
+.brand-sub{font-size:10px;color:#555;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px;font-family:'Barlow Condensed',sans-serif;font-weight:400}
+.target-pills{display:flex;gap:1px}
+.tp{background:#0d0d0d;border:1px solid #2a2a2a;padding:8px 14px;text-align:center}
+.tp:first-child{border-radius:8px 0 0 8px}
+.tp:last-child{border-radius:0 8px 8px 0}
+.tp-v{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;color:var(--lime);letter-spacing:0.04em}
+.tp-l{font-size:9px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-top:1px}
+
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.li{display:flex;align-items:center;gap:5px;font-size:10px;color:#555;letter-spacing:0.1em;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-weight:600}
+.ldot{width:6px;height:6px;border-radius:50%}
+
+.daynav{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px}
+.dn{padding:10px 4px;border-radius:8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#555;background:#0d0d0d;text-align:center;transition:all .15s;border:1px solid #222}
+.dn:hover{color:#888;background:#141414}
+.dn.active.high{background:var(--lime);color:#000;border-color:var(--lime)}
+.dn.active.mod{background:var(--teal);color:#000;border-color:var(--teal)}
+.dn.active.rest{background:#1a1a1a;color:#ededea;border-color:#333}
+
+.hero{border-radius:12px;padding:20px;margin-bottom:20px;border:1px solid #222;background:#0d0d0d;position:relative;overflow:hidden}
+.hero.high{border-color:rgba(204,255,0,0.2);background:#0d0d0d}
+.hero.mod{border-color:rgba(0,229,160,0.2);background:#0d0d0d}
+.hero-glow{position:absolute;top:-20px;right:-20px;width:160px;height:160px;border-radius:50%;pointer-events:none;opacity:0.5}
+.hero.high .hero-glow{background:radial-gradient(circle,rgba(204,255,0,0.1) 0%,transparent 70%)}
+.hero.mod .hero-glow{background:radial-gradient(circle,rgba(0,229,160,0.08) 0%,transparent 70%)}
+.hero.rest .hero-glow{display:none}
+.hero-day{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:58px;line-height:0.88;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:5px;position:relative}
+.hero.high .hero-day{color:var(--lime)}
+.hero.mod .hero-day{color:var(--teal)}
+.hero.rest .hero-day{color:#666}
+.spc-pill{display:inline-block;background:var(--lime);color:#000;border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-size:11px;padding:2px 9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;margin-left:8px;position:relative;top:-6px}
+.hero-label{font-size:13px;color:#888;margin-bottom:16px;font-weight:300;position:relative}
+.macros{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;position:relative}
+.mac{border-radius:7px;padding:10px 8px;text-align:center;border:1px solid #222;background:#141414}
+.mac-v{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:0.02em}
+.mac-l{font-size:9px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
+.hero.high .mac-v{color:var(--lime)}
+.hero.mod .mac-v{color:var(--teal)}
+.hero.rest .mac-v{color:#888}
+.hero-note{font-size:11px;color:#555;font-style:italic;font-weight:300;letter-spacing:0.02em;margin-top:8px;position:relative}
+
+.tl{position:relative;background:#000}
+.tl-rule{position:absolute;left:54px;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,#333,transparent)}
+.mi{display:grid;grid-template-columns:54px 1fr;margin-bottom:7px;align-items:start}
+.mt{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;color:#555;text-align:right;padding-right:12px;padding-top:13px;letter-spacing:0.04em;white-space:nowrap}
+.mc-wrap{padding-left:12px;position:relative}
+.mc-wrap::before{content:'';position:absolute;left:0;top:13px;width:7px;height:7px;border-radius:50%;background:#2a2a2a;border:1px solid #2a2a2a}
+.mc-wrap.supp-w::before{background:var(--blue);border-color:var(--blue);box-shadow:0 0 7px rgba(75,158,255,0.6)}
+.mc-wrap.post-w::before{background:var(--teal);border-color:var(--teal);box-shadow:0 0 7px rgba(0,229,160,0.6)}
+.mc-wrap.warn-w::before{background:var(--lime);border-color:var(--lime);box-shadow:0 0 7px rgba(204,255,0,0.5)}
+.mc-wrap.mag-w::before{background:var(--purple);border-color:var(--purple);box-shadow:0 0 7px rgba(179,157,255,0.6)}
+
+.mc{border-radius:9px;padding:11px 13px;background:#0d0d0d;border:1px solid #222}
+.mc.supp-card{border-color:rgba(75,158,255,0.25);background:#0a0f1a}
+.mc.post-card{border-color:rgba(0,229,160,0.25);background:#00120a}
+.mc.warn-card{border-color:rgba(204,255,0,0.2);background:#0d0f00}
+.mc.mag-card{border-color:rgba(179,157,255,0.25);background:#0e0a1a}
+
+.mn{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#ededea;margin-bottom:8px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;text-transform:uppercase;letter-spacing:0.06em}
+.tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;padding:2px 8px;border-radius:20px;font-weight:700;white-space:nowrap;letter-spacing:0.07em;text-transform:uppercase;border:1px solid transparent}
+.tag-lime{background:rgba(204,255,0,0.12);color:var(--lime);border-color:rgba(204,255,0,0.3)}
+.tag-teal{background:rgba(0,229,160,0.1);color:var(--teal);border-color:rgba(0,229,160,0.3)}
+.tag-blue{background:rgba(75,158,255,0.12);color:var(--blue);border-color:rgba(75,158,255,0.3)}
+.tag-amber{background:rgba(255,184,0,0.12);color:var(--amber);border-color:rgba(255,184,0,0.3)}
+.tag-purple{background:rgba(179,157,255,0.12);color:var(--purple);border-color:rgba(179,157,255,0.3)}
+.tag-red{background:rgba(255,68,68,0.12);color:var(--red);border-color:rgba(255,68,68,0.3)}
+
+.fr{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #1a1a1a;gap:10px;line-height:1.4}
+.fr:last-of-type{border-bottom:none}
+.fc{color:#aaa;flex:1;font-weight:300}
+.fq{color:#666;text-align:right;white-space:nowrap;font-size:11px}
+.fq.supp{color:var(--blue);font-weight:500}
+.fq.warn{color:var(--lime);font-weight:500}
+.fq.mag{color:var(--purple);font-weight:500}
+
+.mm{display:flex;gap:4px;margin-top:9px;flex-wrap:wrap;align-items:center}
+.mc2{padding:3px 9px;border-radius:20px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;border:1px solid transparent}
+.mc2-g{background:rgba(75,158,255,0.1);color:var(--blue);border-color:rgba(75,158,255,0.25)}
+.mc2-p{background:rgba(0,229,160,0.08);color:var(--teal);border-color:rgba(0,229,160,0.25)}
+.mc2-l{background:rgba(255,184,0,0.1);color:var(--amber);border-color:rgba(255,184,0,0.25)}
+.mkcal{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#555;letter-spacing:0.04em}
+
+.note-box{font-size:11px;padding:7px 10px;margin-top:8px;border-radius:6px;line-height:1.55;font-weight:300}
+.note-ok{background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.2);color:rgba(0,229,160,0.85)}
+.note-warn{background:rgba(204,255,0,0.06);border:1px solid rgba(204,255,0,0.2);color:rgba(204,255,0,0.8)}
+.note-info{background:rgba(75,158,255,0.08);border:1px solid rgba(75,158,255,0.2);color:rgba(75,158,255,0.85)}
+.note-purple{background:rgba(179,157,255,0.08);border:1px solid rgba(179,157,255,0.2);color:rgba(179,157,255,0.85)}
+
+.no-train{background:#0d0d0d;border:1px solid #222;border-radius:9px;padding:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#444;margin-bottom:10px;text-align:center;letter-spacing:0.14em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="app">
+
+<div class="topbar">
+  <div>
+    <div class="brand">HYROX <em>//</em> Fuel</div>
+    <div class="brand-sub">Solo Open Men · Lyon 2026</div>
+  </div>
+  <div class="target-pills">
+    <div class="tp"><div class="tp-v">73 kg</div><div class="tp-l">Poids</div></div>
+    <div class="tp"><div class="tp-v">sub-58'</div><div class="tp-l">Target</div></div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="li"><div class="ldot" style="background:var(--blue)"></div>Créatine</div>
+  <div class="li"><div class="ldot" style="background:var(--teal)"></div>Whey</div>
+  <div class="li"><div class="ldot" style="background:var(--purple)"></div>Magnésium</div>
+  <div class="li"><div class="ldot" style="background:var(--lime)"></div>Critique</div>
+</div>
+
+<div class="daynav" id="daynav"></div>
+<div id="hero"></div>
+<div class="tl" id="tl"></div>
+
+</div>
+<script>
+var D=[
+{name:"Lun",type:"high",label:"Run + musculation bas du corps",kcal:3100,g:430,p:155,l:85,note:"Double exigence run / force jambes — glycogène prioritaire.",
+meals:[
+  {t:"6h10",n:"Pré-séance",wrapStyle:"warn-w",style:"warn-card",tags:[{l:"50 min avant",c:"tag-amber"}],
+  foods:[{c:"Compote sans sucre ajouté",q:"90 g — ~15 g G"},{c:"Dattes ou raisins secs",q:"35 g — ~26 g G",s:"warn"}],
+  kcal:200,g:50,p:1,l:0,note:{type:"warn",txt:"Cible 50 g G rapides. Dattes (3–4 pièces) ou raisins secs. Digestion complète avant 7h00."}},
+  {t:"8h30",n:"Post-séance — whey",wrapStyle:"post-w",style:"post-card",tags:[{l:"Whey",c:"tag-teal"},{l:"0–20 min",c:"tag-teal"}],
+  foods:[{c:"Whey isolat — 30 g poudre dans eau",q:"24 g P nettes",s:"supp"},{c:"Raisins secs",q:"40 g — ~31 g G",s:"warn"}],
+  kcal:270,g:40,p:24,l:2,note:{type:"ok",txt:"Ratio 1,3 g G : 1 g P — pic insulinique déclenché. Ne pas attendre le PDJ."}},
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"90 g — ~54 g G / 8 g P"},{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"150 g — ~18 g G"},{c:"Oléagineux si absent du muesli",q:"15 g — ~9 g L"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:690,g:97,p:35,l:18,note:{type:"info",txt:"Créatine avec glucides du PDJ = absorption optimisée. Si muesli avec noix → supprimer les oléagineux séparés."}},
+  {t:"13h00",n:"Déjeuner",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"130 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"200 g"},{c:"Huile ou graisses",q:"15 g"}],
+  kcal:820,g:112,p:42,l:22},
+  {t:"16h30",n:"Collation",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Fromage blanc ou yaourt",q:"150 g — ~15 g P"},{c:"Fruits frais",q:"100 g — ~12 g G"}],
+  kcal:200,g:28,p:18,l:3},
+  {t:"19h30",n:"Dîner + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"100 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"250 g"},{c:"Huile ou graisses",q:"20 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:920,g:103,p:35,l:40,note:{type:"purple",txt:"10h30 après la créatine du PDJ — compétition d'absorption intestinale évitée."}}
+]},
+{name:"Mar",type:"mod",label:"Ergo + skill Hyrox",kcal:2800,g:355,p:155,l:85,note:"Effort aérobie + patterns moteurs — glucides modérés suffisants.",
+meals:[
+  {t:"6h10",n:"Pré-séance",wrapStyle:"warn-w",style:"warn-card",tags:[{l:"Effort modéré",c:"tag-amber"}],
+  foods:[{c:"Compote sans sucre ajouté",q:"90 g — ~15 g G"}],
+  kcal:90,g:22,p:1,l:0,note:{type:"warn",txt:"Pas de sucres rapides supplémentaires — effort érgo moins glycolytique. Compote seule suffit."}},
+  {t:"8h30",n:"Post-séance — whey",wrapStyle:"post-w",style:"post-card",tags:[{l:"Whey",c:"tag-teal"},{l:"0–20 min",c:"tag-teal"}],
+  foods:[{c:"Whey isolat — 30 g poudre dans eau",q:"24 g P nettes",s:"supp"},{c:"Raisins secs ou dattes",q:"30 g — ~23 g G",s:"warn"}],
+  kcal:230,g:30,p:24,l:2,note:{type:"ok",txt:"Dose G réduite vs jours HIGH — effort moins glycolytique que run + force."}},
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"80 g — ~48 g G / 7 g P"},{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"130 g — ~16 g G"},{c:"Oléagineux si absent du muesli",q:"15 g"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:645,g:87,p:33,l:18},
+  {t:"13h00",n:"Déjeuner",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"110 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"200 g"},{c:"Huile ou graisses",q:"15 g"}],
+  kcal:760,g:95,p:42,l:22},
+  {t:"16h30",n:"Collation",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Fromage blanc ou yaourt",q:"150 g"},{c:"Fruits frais",q:"80 g"}],
+  kcal:185,g:23,p:18,l:3},
+  {t:"19h30",n:"Dîner + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"85 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"250 g"},{c:"Huile ou graisses",q:"20 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:890,g:98,p:37,l:40}
+]},
+{name:"Mer",type:"high",label:"Run + musculation haut du corps",kcal:3100,g:430,p:155,l:85,note:"Protéines renforcées collation + dîner — récup pectoraux / dorsaux / épaules.",
+meals:[
+  {t:"6h10",n:"Pré-séance",wrapStyle:"warn-w",style:"warn-card",tags:[{l:"50 min avant",c:"tag-amber"}],
+  foods:[{c:"Compote sans sucre ajouté",q:"90 g — ~15 g G"},{c:"Dattes ou raisins secs",q:"35 g — ~26 g G",s:"warn"}],
+  kcal:200,g:50,p:1,l:0,note:{type:"warn",txt:"Même protocole que lundi — run + force nécessitent le plein glycogène."}},
+  {t:"8h30",n:"Post-séance — whey",wrapStyle:"post-w",style:"post-card",tags:[{l:"Whey",c:"tag-teal"},{l:"0–20 min",c:"tag-teal"}],
+  foods:[{c:"Whey isolat — 30 g poudre dans eau",q:"24 g P nettes",s:"supp"},{c:"Raisins secs",q:"40 g — ~31 g G",s:"warn"}],
+  kcal:270,g:40,p:24,l:2},
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"90 g — ~54 g G / 8 g P"},{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"150 g — ~18 g G"},{c:"Oléagineux si absent du muesli",q:"15 g"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:690,g:97,p:35,l:18},
+  {t:"13h00",n:"Déjeuner",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"120 g cru"},{c:"Viande blanche ou poisson",q:"130 g"},{c:"Légumes",q:"200 g"},{c:"Huile ou graisses",q:"20 g"}],
+  kcal:795,g:103,p:38,l:25},
+  {t:"16h30",n:"Collation — upper body",wrapStyle:"",style:"normal",tags:[{l:"Récup haut",c:"tag-teal"}],
+  foods:[{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P (+50 g vs lundi)"},{c:"Fruits frais",q:"100 g"}],
+  kcal:255,g:30,p:24,l:4,note:{type:"ok",txt:"Produits laitiers +50 g vs lundi — compense la charge musculaire haut du corps."}},
+  {t:"19h30",n:"Dîner + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"100 g cru"},{c:"Viande blanche ou poisson",q:"160 g (+10 g vs lundi)"},{c:"Légumes",q:"250 g"},{c:"Huile ou graisses",q:"15 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:890,g:110,p:37,l:36}
+]},
+{name:"Jeu",type:"mod",label:"Aérobie + sled push/pull",kcal:2800,g:355,p:155,l:85,note:"Force-endurance sled — féculents maintenus déjeuner, glycogène prioritaire.",
+meals:[
+  {t:"6h10",n:"Pré-séance",wrapStyle:"",style:"normal",tags:[{l:"Effort mixte",c:"tag-amber"}],
+  foods:[{c:"Compote sans sucre ajouté",q:"90 g — ~15 g G"}],
+  kcal:90,g:22,p:1,l:0},
+  {t:"8h30",n:"Post-séance — whey",wrapStyle:"post-w",style:"post-card",tags:[{l:"Whey",c:"tag-teal"},{l:"0–20 min",c:"tag-teal"}],
+  foods:[{c:"Whey isolat — 30 g poudre dans eau",q:"24 g P nettes",s:"supp"},{c:"Raisins secs ou dattes",q:"30 g — ~23 g G",s:"warn"}],
+  kcal:230,g:30,p:24,l:2},
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"75 g — ~45 g G / 7 g P"},{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"120 g — ~14 g G"},{c:"Oléagineux si absent du muesli",q:"20 g"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:675,g:83,p:33,l:23},
+  {t:"13h00",n:"Déjeuner — post-sled",wrapStyle:"warn-w",style:"warn-card",tags:[{l:"Glycogène sled",c:"tag-lime"}],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"110 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"200 g"},{c:"Huile ou graisses",q:"15 g"}],
+  kcal:760,g:95,p:42,l:22,note:{type:"warn",txt:"Ne pas réduire les féculents — sled push/pull vide massivement le glycogène des jambes."}},
+  {t:"16h30",n:"Collation",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Fromage blanc ou yaourt",q:"150 g"},{c:"Fruits frais",q:"80 g"}],
+  kcal:185,g:23,p:18,l:3},
+  {t:"19h30",n:"Dîner + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"88 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"300 g"},{c:"Huile ou graisses",q:"15 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:860,g:102,p:37,l:35}
+]},
+{name:"Ven",type:"high",label:"Simulation Hyrox — protocole compétition",kcal:3100,g:430,p:155,l:85,note:"Chaque vendredi = jour de compétition. Zéro expérimentation.",special:true,
+meals:[
+  {t:"6h10",n:"Pré-séance — dose race",wrapStyle:"warn-w",style:"warn-card",tags:[{l:"Race protocol",c:"tag-red"},{l:"Charge max",c:"tag-lime"}],
+  foods:[{c:"Compote sans sucre ajouté",q:"100 g — ~17 g G"},{c:"Dattes ou raisins secs",q:"50 g — ~37 g G",s:"warn"}],
+  kcal:295,g:72,p:1,l:0,note:{type:"warn",txt:"Dose +20 g vs habitude. Cible : 72 g G rapides. Identique au jour J de compétition."}},
+  {t:"8h30",n:"Post-séance — pic insuline",wrapStyle:"post-w",style:"post-card",tags:[{l:"Whey",c:"tag-teal"},{l:"0–10 min",c:"tag-red"}],
+  foods:[{c:"Whey isolat — 30 g poudre dans eau",q:"24 g P nettes",s:"supp"},{c:"Raisins secs",q:"50 g — ~39 g G",s:"warn"}],
+  kcal:310,g:50,p:24,l:2,note:{type:"warn",txt:"Dose G maximale — fenêtre anabolique critique. Prendre dans les 10 min post-simulation."}},
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"90 g — ~54 g G / 8 g P"},{c:"Fromage blanc 0% ou yaourt",q:"250 g — ~25 g P (+50 g)"},{c:"Fruits frais",q:"120 g"},{c:"Oléagineux si absent du muesli",q:"10 g — réduits"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:660,g:91,p:38,l:13,note:{type:"info",txt:"Lipides réduits — priorité récupération protéique sans alourdir la digestion."}},
+  {t:"13h00",n:"Déjeuner — récupération",wrapStyle:"",style:"normal",tags:[{l:"Lipides réduits",c:"tag-teal"}],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"90 g cru"},{c:"Viande blanche ou poisson",q:"150 g"},{c:"Légumes",q:"200 g"},{c:"Huile ou graisses",q:"10 g — réduits"}],
+  kcal:647,g:77,p:42,l:15,note:{type:"ok",txt:"Lipides à 10 g — glucides prioritaires pour resynthèse glycogénique post-simulation."}},
+  {t:"16h30",n:"Collation",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Fromage blanc ou yaourt",q:"150 g"},{c:"Fruits frais",q:"80 g"}],
+  kcal:185,g:23,p:18,l:3},
+  {t:"19h30",n:"Dîner — chargement + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"},{l:"Stockage lundi",c:"tag-teal"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"120 g cru (+20 g vs habitude)"},{c:"Viande blanche ou poisson",q:"130 g"},{c:"Légumes",q:"150 g"},{c:"Huile ou graisses",q:"25 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:1003,g:117,p:32,l:52,note:{type:"ok",txt:"Féculents +20 g vs habitude — stockage glycogène hépatique pour la semaine suivante."}}
+]},
+{name:"Sam",type:"rest",label:"Repos — réparation musculaire",kcal:2400,g:250,p:150,l:90,note:"Pas de séance — pas de whey. Viande/poisson renforcés pour compenser.",
+meals:[
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"70 g — ~42 g G / 6 g P"},{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"150 g"},{c:"Oléagineux si absent du muesli",q:"20 g"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:626,g:76,p:32,l:22,note:{type:"info",txt:"Créatine tous les jours sans exception, même au repos — règle absolue de saturation."}},
+  {t:"13h00",n:"Déjeuner — protéines renforcées",wrapStyle:"warn-w",style:"warn-card",tags:[{l:"Sans whey",c:"tag-amber"}],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"90 g cru"},{c:"Viande blanche ou poisson",q:"180 g (+30 g vs semaine)"},{c:"Légumes",q:"250 g"},{c:"Huile ou graisses",q:"20 g"}],
+  kcal:718,g:77,p:45,l:26,note:{type:"warn",txt:"V/P +30 g pour compenser l'absence de la whey. Protéines solides = absorption étalée 4–5h."}},
+  {t:"16h30",n:"Collation",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"80 g"}],
+  kcal:230,g:22,p:24,l:4},
+  {t:"19h30",n:"Dîner + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"78 g cru"},{c:"Viande blanche ou poisson",q:"170 g"},{c:"Légumes",q:"250 g"},{c:"Huile ou graisses",q:"25 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:826,g:75,p:49,l:38}
+]},
+{name:"Dim",type:"rest",label:"Repos — stockage pré-lundi",kcal:2400,g:250,p:150,l:90,note:"Dîner : féculents augmentés pour préparer le glycogène du run lundi 7h00.",
+meals:[
+  {t:"9h00",n:"Petit-déjeuner + créatine",wrapStyle:"supp-w",style:"supp-card",tags:[{l:"Créatine",c:"tag-blue"}],
+  foods:[{c:"Muesli nature pesé sec",q:"65 g — ~39 g G / 6 g P"},{c:"Fromage blanc 0% ou yaourt",q:"200 g — ~20 g P"},{c:"Fruits frais",q:"150 g"},{c:"Oléagineux si absent du muesli",q:"20 g"},{c:"Créatine monohydrate Creapure",q:"5 g — dissoudre dans le yaourt",s:"supp"}],
+  kcal:610,g:72,p:32,l:22},
+  {t:"13h00",n:"Déjeuner",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Féculents — riz / pâtes / quinoa",q:"80 g cru"},{c:"Viande blanche ou poisson",q:"180 g"},{c:"Légumes",q:"250 g"},{c:"Huile ou graisses",q:"20 g"}],
+  kcal:690,g:68,p:45,l:26},
+  {t:"16h30",n:"Collation",wrapStyle:"",style:"normal",tags:[],
+  foods:[{c:"Fromage blanc 0% ou yaourt",q:"200 g"},{c:"Fruits frais",q:"100 g"}],
+  kcal:250,g:27,p:24,l:4},
+  {t:"19h30",n:"Dîner — chargement + magnésium",wrapStyle:"mag-w",style:"mag-card",tags:[{l:"Magnésium",c:"tag-purple"},{l:"Pré-lundi",c:"tag-teal"}],
+  foods:[{c:"Féculents — riz / quinoa / pâtes",q:"85 g cru (+7 g vs sam.)"},{c:"Viande blanche ou poisson",q:"160 g"},{c:"Légumes",q:"200 g"},{c:"Huile ou graisses",q:"25 g"},{c:"Magnésium bisglycinate",q:"300–350 mg avec le repas",s:"mag"}],
+  kcal:850,g:83,p:43,l:38,note:{type:"ok",txt:"Féculents +7 g vs samedi — glycogène hépatique reconstitué avant le run du lundi 7h00."}}
+]}
+];
+
+var cur=0;
+function render(){
+  var d=D[cur];
+  var nav=document.getElementById('daynav');
+  nav.innerHTML='';
+  D.forEach(function(day,i){
+    var b=document.createElement('button');
+    b.className='dn '+day.type+(i===cur?' active':'');
+    b.textContent=day.name;
+    b.onclick=(function(idx){return function(){cur=idx;render();}})(i);
+    nav.appendChild(b);
+  });
+  var t=d.type;
+  document.getElementById('hero').innerHTML=
+    '<div class="hero '+t+'">'
+    +'<div class="hero-glow"></div>'
+    +'<div class="hero-day">'+d.name+(d.special?'<span class="spc-pill">Race</span>':'')+'</div>'
+    +'<div class="hero-label">'+d.label+'</div>'
+    +'<div class="macros">'
+    +'<div class="mac"><div class="mac-v">'+d.kcal+'</div><div class="mac-l">kcal</div></div>'
+    +'<div class="mac"><div class="mac-v">'+d.g+'g</div><div class="mac-l">glucides</div></div>'
+    +'<div class="mac"><div class="mac-v">'+d.p+'g</div><div class="mac-l">protéines</div></div>'
+    +'<div class="mac"><div class="mac-v">'+d.l+'g</div><div class="mac-l">lipides</div></div>'
+    +'</div>'
+    +'<div class="hero-note">'+d.note+'</div>'
+    +'</div>';
+  var html='<div class="tl-rule"></div>';
+  if(t==='rest') html+='<div class="no-train">// pas de séance — pas de repas péri-entraînement //</div>';
+  d.meals.forEach(function(m){
+    var tags=(m.tags||[]).map(function(tg){return'<span class="tag '+tg.c+'">'+tg.l+'</span>'}).join('');
+    var foods=m.foods.map(function(f){
+      var qcls=f.s==='supp'?'fq supp':f.s==='mag'?'fq mag':f.s==='warn'?'fq warn':'fq';
+      return'<div class="fr"><span class="fc">'+f.c+'</span><span class="'+qcls+'">'+f.q+'</span></div>';
+    }).join('');
+    var noteHtml=m.note?'<div class="note-box note-'+m.note.type+'">'+m.note.txt+'</div>':'';
+    var mm='<div class="mm"><span class="mc2 mc2-g">G '+m.g+'g</span><span class="mc2 mc2-p">P '+m.p+'g</span><span class="mc2 mc2-l">L '+m.l+'g</span><span class="mkcal">'+m.kcal+' kcal</span></div>';
+    html+='<div class="mi"><div class="mt">'+m.t+'</div>'
+      +'<div class="mc-wrap '+(m.wrapStyle||'')+'">'
+      +'<div class="mc '+m.style+'"><div class="mn">'+m.n+' '+tags+'</div>'
+      +foods+mm+noteHtml
+      +'</div></div></div>';
+  });
+  document.getElementById('tl').innerHTML=html;
+}
+render();
+</script>
+</body>
+</html>
